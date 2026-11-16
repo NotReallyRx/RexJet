@@ -1,5 +1,6 @@
 (function(){
   const DEFAULT_WISP_URL="wss://wisp.freewisp.org/";
+  const BASE=new URL("./", location.href);
   const css=`*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0}body{font-family:"Noto Sans",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#101010;color:#fff}
 #content{position:relative;width:100%;height:100%;display:none}#content.active{display:block}
 #browserFrame{width:100%;height:100%;border:0;display:block;background:#101010}
@@ -54,7 +55,7 @@
   function normalizeInput(v){v=(v||"").trim();if(!v)return null;if(/^https?:\/\//i.test(v))return v;return `https://${v}`;}
 
   async function waitForServiceWorker(){
-    const reg=await navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"});
+    const reg=await navigator.serviceWorker.register(new URL("sw.js",BASE).href,{scope:new URL("./",BASE).href,updateViaCache:"none"});
     await navigator.serviceWorker.ready;
     if(navigator.serviceWorker.controller)return navigator.serviceWorker.controller;
     if(!reg.active) throw new Error("Service worker is not active.");
@@ -66,7 +67,7 @@
     showLoading("Starting...");
     const serviceworker=await waitForServiceWorker();
     const transport=new LibcurlTransport.LibcurlClient({websocket:WISP_URL});
-    controller=new $rexjetController.Controller({serviceworker,transport,config:{prefix:"/edu/"}});
+    controller=new $rexjetController.Controller({serviceworker,transport,config:{prefix:new URL("edu/",BASE).pathname,rexjetPath:new URL("rj/main.runtime.bundle.js",BASE).pathname,injectPath:new URL("rj/app.bundle.js",BASE).pathname,wasmPath:new URL("rj/studying.wasm",BASE).pathname}});
     await controller.wait();
     return controller;
   }

@@ -385,9 +385,9 @@ var $rexjetController;
       a = r(355);
     let c = {
         prefix: new URL("edu/", new URL("../../", location.href)).pathname,
-        rexjetPath: "/rj/main.runtime.bundle.js",
-        injectPath: "/rj/app.bundle.js",
-        wasmPath: "/rj/studying.wasm",
+        rexjetPath: new URL("rj/main.runtime.bundle.js", location.href).pathname,
+        injectPath: new URL("rj/app.bundle.js", location.href).pathname,
+        wasmPath: new URL("rj/studying.wasm", location.href).pathname,
         virtualWasmPath: "runtime.wasm.js",
         codec: {
           encode: (e) => (e ? encodeURIComponent(e) : e),
